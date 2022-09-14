@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "768680637105",
+    "project_id": "notes-val-project",
+    "storage_bucket": "notes-val-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768680637105:android:411bf6a61138ece298a890",
+        "android_client_info": {
+          "package_name": "com.valewele.notes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768680637105-6t61fpr74fimaqq2rkji6bepb72ecoln.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0bayRrqxTRdGXRMAfHaieh66mX4DnYqY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768680637105-6t61fpr74fimaqq2rkji6bepb72ecoln.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
