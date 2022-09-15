@@ -66,8 +66,7 @@ class _LoginViewState extends State<LoginView> {
               final email = _email.text;
               final password = _password.text;
               try {
-                final userCredential =
-                    await FirebaseAuth.instance.signInWithEmailAndPassword(
+                await FirebaseAuth.instance.signInWithEmailAndPassword(
                   email: email,
                   password: password,
                 );
@@ -75,7 +74,6 @@ class _LoginViewState extends State<LoginView> {
                   '/notes/',
                   (route) => false,
                 );
-                devtools.log(userCredential.toString());
               } on FirebaseException catch (e) {
                 if (e.code == "user-not-found") {
                   devtools.log("Incorrect Email or Password");
