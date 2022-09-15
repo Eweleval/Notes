@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes/constants/routes.dart';
 import 'views/views.dart';
 
 void main() {
@@ -12,9 +13,9 @@ void main() {
       ),
       home: const HomePage(),
       routes: {
-        '/login/': (context) => const LoginView(),
-        '/register/': (context) => const RegisterView(),
-        '/notes/': (context) => const NotesView(),
+        loginRoute: (context) => const LoginView(),
+        registerRoute: (context) => const RegisterView(),
+        notesRoute: (context) => const NotesView(),
       },
     ),
   );
