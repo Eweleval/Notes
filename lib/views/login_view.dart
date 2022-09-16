@@ -90,13 +90,13 @@ class _LoginViewState extends State<LoginView> {
                 } else {
                   await showErrorDialog(
                     context,
-                    e.toString(),
+                    'Error: ${e.code}',
                   );
                 }
               } catch (e) {
                 await showErrorDialog(
                   context,
-                  'User not found',
+                  e.toString(),
                 );
               }
             },
