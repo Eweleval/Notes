@@ -8,7 +8,7 @@ class WeakPasswordAuthException implements Exception {}
 
 class EmailAlreadyInUseAuthException implements Exception {}
 
-class InvalidUserAuthException implements Exception {}
+class InvalidEmailAuthException implements Exception {}
 
 //Generic Exceptions
 class GenericAuthException implements Exception {}

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:developer' as devtools show log;
-
 import 'package:notes/constants/routes.dart';
-
-enum MenuAction { logout }
+import 'package:notes/enums/menu_actions.dart';
+import 'package:notes/services/auth/auth.dart';
+import 'package:notes/utilities/utilities.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -22,17 +20,17 @@ class _NotesViewState extends State<NotesView> {
         actions: [
           PopupMenuButton<MenuAction>(
             onSelected: (value) async {
+              final navigator = Navigator.of(context);
               switch (value) {
                 case MenuAction.logout:
                   final shouldLogout = await showLogoutDialog(context);
                   if (shouldLogout) {
-                    FirebaseAuth.instance.signOut();
-                    Navigator.of(context).pushNamedAndRemoveUntil(
+                    await AuthService.firebase().logOut();
+                    navigator.pushNamedAndRemoveUntil(
                       loginRoute,
                       (_) => false,
                     );
                   }
-                  devtools.log(shouldLogout.toString());
                   break;
               }
             },
@@ -49,30 +47,4 @@ class _NotesViewState extends State<NotesView> {
       ),
     );
   }
-}
-
-Future<bool> showLogoutDialog(BuildContext context) {
-  return showDialog<bool>(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text('Sign Out'),
-        content: const Text('Are you sure you want to sign out?'),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(false);
-            },
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-            child: const Text('Logout'),
-          ),
-        ],
-      );
-    },
-  ).then((value) => value ?? false);
 }
