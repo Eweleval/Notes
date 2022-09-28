@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' show join;
-import 'package:flutter/foundation.dart';
 
 import 'crud_exceptions.dart';
 
@@ -14,11 +13,16 @@ class NotesService {
   List<DatabaseNote> _notes = [];
 
   static final NotesService _shared = NotesService.sharedInstance();
-  NotesService.sharedInstance();
+  NotesService.sharedInstance() {
+    _notesStreamController = StreamController<List<DatabaseNote>>.broadcast(
+      onListen: () {
+        _notesStreamController.sink.add(_notes);
+      },
+    );
+  }
   factory NotesService() => _shared;
 
-  final _notesStreamController =
-      StreamController<List<DatabaseNote>>.broadcast();
+  late final StreamController<List<DatabaseNote>> _notesStreamController;
 
   Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
 
@@ -51,10 +55,14 @@ class NotesService {
     await getNotes(id: note.id);
 
     // update db
-    final updatesCount = await db.update(noteTable, {
-      textColumn: text,
-      isSyncedWithCloudColumn: 0,
-    });
+    final updatesCount = await db.update(
+        noteTable,
+        {
+          textColumn: text,
+          isSyncedWithCloudColumn: 0,
+        },
+        where: 'id = ?',
+        whereArgs: [note.id]);
 
     if (updatesCount == 0) {
       throw CouldNotUpdateNote();
@@ -230,7 +238,9 @@ class NotesService {
   Future<void> _ensusreDbIsOpen() async {
     try {
       await open();
-    } on DatabaseAlreadyOpenException {}
+    } on DatabaseAlreadyOpenException {
+      //empty
+    }
   }
 
   Future<void> open() async {
@@ -309,7 +319,7 @@ class DatabaseNote {
   int get hashCode => id.hashCode;
 }
 
-const database = 'note.db';
+const database = 'notes.db';
 const noteTable = 'note';
 const userTable = 'user';
 
@@ -325,7 +335,7 @@ const createUserTable = '''CREATE TABLE IF NOT EXISTS "user" (
 	      PRIMARY KEY("id" AUTOINCREMENT)
       );''';
 
-const createNotesTable = '''CREATE TABLE IF NOT EXISTS "note " (
+const createNotesTable = '''CREATE TABLE IF NOT EXISTS "note" (
         "id"	INTEGER NOT NULL,
         "user_id"	INTEGER NOT NULL,
         "text"	TEXT,
