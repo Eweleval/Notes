@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:notes/constants/routes.dart';
 import 'package:notes/enums/menu_actions.dart';
 import 'package:notes/services/auth/auth.dart';
@@ -42,16 +43,13 @@ class _NotesViewState extends State<NotesView> {
                   case MenuAction.logout:
                     final shouldLogout = await showLogOutDialog(context);
                     if (shouldLogout) {
-                      await AuthService.firebase().logOut();
-                      navigator.pushNamedAndRemoveUntil(
-                        loginRoute,
-                        (_) => false,
-                      );
+                      context.read<AuthBloc>().add(
+                            const AuthEventLogOut(),
+                          );
                     }
-                    break;
                 }
               },
-              itemBuilder: (BuildContext context) {
+              itemBuilder: (context) {
                 return const [
                   PopupMenuItem<MenuAction>(
                     value: MenuAction.logout,
