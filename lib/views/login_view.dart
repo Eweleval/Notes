@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:notes/constants/routes.dart';
 import 'package:notes/services/auth/auth.dart';
 import 'package:notes/utilities/dialogs/dialog.dart';
 
@@ -88,46 +87,12 @@ class _LoginViewState extends State<LoginView> {
               onPressed: () async {
                 final email = _email.text;
                 final password = _password.text;
-                // final navigator = Navigator.of(context);
-                // try {
                 context.read<AuthBloc>().add(
                       AuthEventLogIn(
                         email,
                         password,
                       ),
                     );
-                // await AuthService.firebase().logIn(
-                //   email: email,
-                //   password: password,
-                // );
-                // final user = AuthService.firebase().currentUser;
-                // if (user?.isEmailVerified ?? false) {
-                //   navigator.pushNamedAndRemoveUntil(
-                //     notesRoute,
-                //     (route) => false,
-                //   );
-                // } else {
-                //   navigator.pushNamedAndRemoveUntil(
-                //     verifyEmailRoute,
-                //     (route) => false,
-                //   );
-                // }
-                //} on UserNotFoundAuthException {
-                //   await showErrorDialog(
-                //     context,
-                //     'User not found',
-                //   );
-                // } on WrongPasswordAuthException {
-                //   await showErrorDialog(
-                //     context,
-                //     'Invalid credentials',
-                //   );
-                // } on GenericAuthException {
-                //   await showErrorDialog(
-                //     context,
-                //     'Authentication error.',
-                //   );
-                // }
               },
               child: const Text("Login"),
             ),
@@ -137,10 +102,9 @@ class _LoginViewState extends State<LoginView> {
                 const Text("Not registered yet?"),
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      registerRoute,
-                      (route) => false,
-                    );
+                    context.read<AuthBloc>().add(
+                          const AuthEventShouldRegister(),
+                        );
                   },
                   child: const Text(
                     "Register Here!",

@@ -18,10 +18,6 @@ void main() {
         child: const HomePage(),
       ),
       routes: {
-        loginRoute: (context) => const LoginView(),
-        registerRoute: (context) => const RegisterView(),
-        notesRoute: (context) => const NotesView(),
-        verifyEmailRoute: (context) => const VerifyEmailView(),
         createOrUpdateNoteRoute: (context) => const CreateUpdateNoteView(),
       },
     ),
