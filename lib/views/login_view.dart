@@ -31,44 +31,65 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Login',
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) async {
+        if (state is AuthStateLoggedOut) {
+          if (state.exception is UserNotFoundAuthException) {
+            await showErrorDialog(
+              context,
+              'context.loc.login_error_cannot_find_user',
+            );
+          } else if (state.exception is WrongPasswordAuthException) {
+            await showErrorDialog(
+              context,
+              'context.loc.login_error_wrong_credentials',
+            );
+          } else if (state.exception is GenericAuthException) {
+            await showErrorDialog(
+              context,
+              'context.loc.login_error_auth_error',
+            );
+          }
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text(
+            'Login',
+          ),
         ),
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _email,
-              autocorrect: false,
-              enableSuggestions: false,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                hintText: 'Enter Your Email Here',
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _email,
+                autocorrect: false,
+                enableSuggestions: false,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                  hintText: 'Enter Your Email Here',
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _password,
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration: const InputDecoration(
-                hintText: 'Enter Your Password Here',
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _password,
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                decoration: const InputDecoration(
+                  hintText: 'Enter Your Password Here',
+                ),
               ),
             ),
-          ),
-          TextButton(
-            onPressed: () async {
-              final email = _email.text;
-              final password = _password.text;
-              final navigator = Navigator.of(context);
-              try {
+            TextButton(
+              onPressed: () async {
+                final email = _email.text;
+                final password = _password.text;
+                // final navigator = Navigator.of(context);
+                // try {
                 context.read<AuthBloc>().add(
                       AuthEventLogIn(
                         email,
@@ -91,43 +112,44 @@ class _LoginViewState extends State<LoginView> {
                 //     (route) => false,
                 //   );
                 // }
-              } on UserNotFoundAuthException {
-                await showErrorDialog(
-                  context,
-                  'User not found',
-                );
-              } on WrongPasswordAuthException {
-                await showErrorDialog(
-                  context,
-                  'Invalid credentials',
-                );
-              } on GenericAuthException {
-                await showErrorDialog(
-                  context,
-                  'Authentication error.',
-                );
-              }
-            },
-            child: const Text("Login"),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text("Not registered yet?"),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    registerRoute,
-                    (route) => false,
-                  );
-                },
-                child: const Text(
-                  "Register Here!",
+                //} on UserNotFoundAuthException {
+                //   await showErrorDialog(
+                //     context,
+                //     'User not found',
+                //   );
+                // } on WrongPasswordAuthException {
+                //   await showErrorDialog(
+                //     context,
+                //     'Invalid credentials',
+                //   );
+                // } on GenericAuthException {
+                //   await showErrorDialog(
+                //     context,
+                //     'Authentication error.',
+                //   );
+                // }
+              },
+              child: const Text("Login"),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Not registered yet?"),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      registerRoute,
+                      (route) => false,
+                    );
+                  },
+                  child: const Text(
+                    "Register Here!",
+                  ),
                 ),
-              ),
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

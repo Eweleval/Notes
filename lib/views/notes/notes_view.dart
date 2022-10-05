@@ -21,6 +21,7 @@ class _NotesViewState extends State<NotesView> {
   @override
   void initState() {
     _notesService = FirebaseCloudStorage();
+
     super.initState();
   }
 
@@ -38,7 +39,7 @@ class _NotesViewState extends State<NotesView> {
             ),
             PopupMenuButton<MenuAction>(
               onSelected: (value) async {
-                final navigator = Navigator.of(context);
+                // final navigator = Navigator.of(context);
                 switch (value) {
                   case MenuAction.logout:
                     final shouldLogout = await showLogOutDialog(context);
