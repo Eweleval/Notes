@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notes/extensions/extensions.dart';
 import 'package:notes/services/auth/auth.dart';
 import 'package:notes/utilities/dialogs/dialog.dart';
 
@@ -36,41 +37,40 @@ class _LoginViewState extends State<LoginView> {
           if (state.exception is UserNotFoundAuthException) {
             await showErrorDialog(
               context,
-              'context.loc.login_error_cannot_find_user',
+              context.loc.login_error_cannot_find_user,
             );
           } else if (state.exception is WrongPasswordAuthException) {
             await showErrorDialog(
               context,
-              'context.loc.login_error_wrong_credentials',
+              context.loc.login_error_wrong_credentials,
             );
           } else if (state.exception is GenericAuthException) {
             await showErrorDialog(
               context,
-              'context.loc.login_error_auth_error',
+              context.loc.login_error_auth_error,
             );
           }
         }
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Login',
+          title: Text(
+            context.loc.login,
           ),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              const Text(
-                  'Please login into your account in order to interact with and create notes!'),
+              Text(context.loc.login_view_prompt),
               TextField(
                 controller: _email,
                 autocorrect: false,
                 enableSuggestions: false,
                 autofocus: true,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  hintText: 'Enter Your Email Here',
+                decoration: InputDecoration(
+                  hintText: context.loc.email_text_field_placeholder,
                 ),
               ),
               TextField(
@@ -78,8 +78,8 @@ class _LoginViewState extends State<LoginView> {
                 obscureText: true,
                 enableSuggestions: false,
                 autocorrect: false,
-                decoration: const InputDecoration(
-                  hintText: 'Enter Your Password Here',
+                decoration: InputDecoration(
+                  hintText: context.loc.password_text_field_placeholder,
                 ),
               ),
               TextButton(
@@ -93,7 +93,7 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       );
                 },
-                child: const Text("Login"),
+                child: Text(context.loc.login),
               ),
               TextButton(
                 onPressed: () async {
@@ -101,20 +101,24 @@ class _LoginViewState extends State<LoginView> {
                         const AuthEventForgotPassword(),
                       );
                 },
-                child: const Text("Forgot Password?"),
+                child: Text(
+                  context.loc.login_view_forgot_password,
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Not registered yet?"),
+                  Text(
+                    context.loc.login_view_not_registered_yet,
+                  ),
                   TextButton(
                     onPressed: () {
                       context.read<AuthBloc>().add(
                             const AuthEventShouldRegister(),
                           );
                     },
-                    child: const Text(
-                      "Register Here!",
+                    child: Text(
+                      context.loc.login_view_register_here,
                     ),
                   ),
                 ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:notes/extensions/extensions.dart';
 import 'package:notes/services/auth/auth.dart';
 import 'package:notes/utilities/dialogs/dialog.dart';
 
@@ -36,30 +37,30 @@ class _RegisterViewState extends State<RegisterView> {
           if (state.exception is WeakPasswordAuthException) {
             await showErrorDialog(
               context,
-              'context.loc.register_error_weak_password',
+              context.loc.register_error_weak_password,
             );
           } else if (state.exception is EmailAlreadyInUseAuthException) {
             await showErrorDialog(
               context,
-              'context.loc.register_error_email_already_in_use',
+              context.loc.register_error_email_already_in_use,
             );
           } else if (state.exception is GenericAuthException) {
             await showErrorDialog(
               context,
-              'context.loc.register_error_generic',
+              context.loc.register_error_generic,
             );
           } else if (state.exception is InvalidEmailAuthException) {
             await showErrorDialog(
               context,
-              'context.loc.register_error_invalid_email',
+              context.loc.register_error_invalid_email,
             );
           }
         }
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Register',
+          title: Text(
+            context.loc.register,
           ),
         ),
         body: Padding(
@@ -67,15 +68,15 @@ class _RegisterViewState extends State<RegisterView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Enter an email and password to start saving notes!'),
+              Text(context.loc.register_view_prompt),
               TextField(
                 controller: _email,
                 autocorrect: false,
                 enableSuggestions: false,
                 autofocus: true,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  hintText: 'Enter Your Email Here',
+                decoration: InputDecoration(
+                  hintText: context.loc.email_text_field_placeholder,
                 ),
               ),
               TextField(
@@ -83,8 +84,8 @@ class _RegisterViewState extends State<RegisterView> {
                 obscureText: true,
                 enableSuggestions: false,
                 autocorrect: false,
-                decoration: const InputDecoration(
-                  hintText: 'Enter Your Password Here',
+                decoration: InputDecoration(
+                  hintText: context.loc.password_text_field_placeholder,
                 ),
               ),
               Center(
@@ -101,20 +102,20 @@ class _RegisterViewState extends State<RegisterView> {
                               ),
                             );
                       },
-                      child: const Text("Register"),
+                      child: Text(context.loc.register),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Already registered?"),
+                        Text(context.loc.register_view_already_registered),
                         TextButton(
                           onPressed: () {
                             context.read<AuthBloc>().add(
                                   const AuthEventLogOut(),
                                 );
                           },
-                          child: const Text(
-                            "Login Here!",
+                          child: Text(
+                            context.loc.register_view_register_here,
                           ),
                         ),
                       ],
